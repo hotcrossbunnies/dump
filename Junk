@@ -1,60 +1,63 @@
---vivivivivivivivivivivivivivivivivivivivivivivi ibibivibiiviviviviviviviviviviviviviviviviviv
+--OWOWOWOWOWOWOWOWOWOWOWOWOWOWOWOWOWOWOWOWOWOWOWOWOWOWOWOWOWOWOWOWOWOWO
 
+local Players = game:GetService("Players") -- p
+local LocalPlayer = Players.LocalPlayer -- lp
 
-
-
-local p=game:GetService("Players")
-local lp = p.LocalPlayer
-print(lp:GetNetworkPing())
-workspace.FallenPartsDestroyHeight=tonumber("nan")
 local function predict(target)
     local v = target.Velocity
-    local p = Vector3.new(v.X,v.Y/5+1,v.Z-.2)/ (.4*((lp:GetNetworkPing()*1000)/50))
-    return CFrame.new(target.Position + p, target.Position) * CFrame.Angles(math.rad(90),0,0)
-end
-wait(.1)
-_G.t = not _G.t while _G.t do
-local n = p:GetPlayers()
-table.remove(n,table.find(n,p.LocalPlayer))
-local c=p.LocalPlayer.Character
-for _, v in ipairs(c:GetDescendants()) do
-	if v:IsA("BasePart") then
-		v.CanTouch = false
-	end
-end
-for _,px in pairs(n) do
-local h=c.HumanoidRootPart
-local hum=c.Humanoid
-local op = h.CFrame
-local vc = px.Character
-local v
-local vh
-if vc then
-v = px.Character:FindFirstChild("HumanoidRootPart")
-vh = px.Character:FindFirstChild("Humanoid")
-end
-if v and vh and not (vh.SeatPart and vh.SeatPart.Anchored == true) then
-for i=1,5 do
-     h.CFrame = v.CFrame * CFrame.Angles(0,math.rad(90),0)
-    h.Velocity = Vector3.new(0,-1e9,0)
-    task.wait()
-end
-for i=1,5 do
-     h.CFrame = predict(v)
-    h.Velocity = Vector3.new(0,-1e9,0)
-    task.wait()
+    local p = Vector3.new(v.X, v.Y / 5 + 1, v.Z - .2) / (.4 * ((LocalPlayer:GetNetworkPing() * 1000) / 50))
+    return CFrame.new(target.Position + p, target.Position) * CFrame.Angles(math.rad(90), 0, 0)
 end
 
-local V3 = Vector3.new(0, 0, 0)
-hum.Sit = true
-h.CFrame = op
-for _, v in ipairs(c:GetDescendants()) do
-	if v:IsA("BasePart") then
-		v.Velocity, v.RotVelocity = V3, V3
-	end
-end
-hum.Sit = false
-end
-end
-task.wait()
+workspace.FallenPartsDestroyHeight = tonumber("nan")
+task.wait(.1)
+
+_G.loop = not _G.loop
+while _G.loop do
+
+    local Character = LocalPlayer.Character
+    local HumanoidRootPart = Character.HumanoidRootPart -- h
+    local Humanoid = Character.Humanoid
+
+    for _, Part in ipairs(Character:GetDescendants()) do
+        if Part:IsA("BasePart") then
+            Part.CanTouch = false
+        end
+    end
+
+    local PlayerList = Players:GetPlayers()
+    table.remove(PlayerList, table.find(PlayerList, LocalPlayer))
+    for _, Player in pairs(PlayerList) do
+        local OldPos = HumanoidRootPart.CFrame
+        local VCharacter = Player.Character
+        local VHumanoidRootPart
+        local VHumanoid
+        if VCharacter then
+            VHumanoidRootPart = VCharacter:FindFirstChild("HumanoidRootPart")
+            VHumanoid = VCharacter:FindFirstChild("Humanoid")
+        end
+        if VHumanoidRootPart and VHumanoid and not (VHumanoid.SeatPart and VHumanoid.SeatPart.Anchored == true) then
+            for i = 1, 5 do
+                HumanoidRootPart.CFrame = VHumanoidRootPart.CFrame * CFrame.Angles(0, math.rad(90), 0)
+                HumanoidRootPart.Velocity = Vector3.new(0, -1e9, 0)
+                task.wait()
+            end
+            for i = 1, 5 do
+                HumanoidRootPart.CFrame = predict(VHumanoidRootPart)
+                HumanoidRootPart.Velocity = Vector3.new(0, -1e9, 0)
+                task.wait()
+            end
+
+            local V3 = Vector3.new(0, 0, 0)
+            Humanoid.Sit = true
+            HumanoidRootPart.CFrame = OldPos
+            for _, v in ipairs(Character:GetDescendants()) do
+                if v:IsA("BasePart") then
+                    v.Velocity, v.RotVelocity = V3, V3
+                end
+            end
+            Humanoid.Sit = false
+        end
+    end
+    task.wait()
 end
