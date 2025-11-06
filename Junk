@@ -3,7 +3,7 @@ local LocalPlayer = Players.LocalPlayer -- lp
 
 local function predict(target)
     local v = target.Velocity
-    local p = Vector3.new(v.X, v.Y / 5 + 1, v.Z - .2) / (.4 * ((LocalPlayer:GetNetworkPing() * 1000) / 50))
+    local p = Vector3.new(v.X, v.Y / 5, v.Z - .2) / (.4 * ((LocalPlayer:GetNetworkPing() * 1000) / 50))
     return CFrame.new(target.Position + p, target.Position) * CFrame.Angles(math.rad(90), 0, 0)
 end
 local function setcam(target)
