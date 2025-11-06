@@ -11,6 +11,7 @@ local function setcam(target)
 end
 
 workspace.FallenPartsDestroyHeight = tonumber("nan")
+game:GetService("CoreGui").RobloxNetworkPauseNotification.Enabled = false
 task.wait(.1)
 
 _G.loop = not _G.loop
