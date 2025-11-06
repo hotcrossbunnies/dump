@@ -21,7 +21,8 @@ while _G.loop do
     local HumanoidRootPart = Character.HumanoidRootPart
     local Humanoid = Character.Humanoid
 
-    local OldPos = HumanoidRootPart.CFrame
+    local OldCFrame = HumanoidRootPart.CFrame
+    local OldPos = HumanoidRootPart.Position
 
     for _, Part in ipairs(Character:GetDescendants()) do
         if Part:IsA("BasePart") then
@@ -54,7 +55,7 @@ while _G.loop do
 
             local V3 = Vector3.new(0, 0, 0)
             Humanoid.Sit = true
-            HumanoidRootPart.CFrame = OldPos
+            HumanoidRootPart.CFrame = OldCFrame
             for _, v in ipairs(Character:GetDescendants()) do
                 if v:IsA("BasePart") then
                     v.Velocity, v.RotVelocity = V3, V3
