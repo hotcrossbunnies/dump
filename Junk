@@ -13,16 +13,20 @@ end
 workspace.FallenPartsDestroyHeight = tonumber("nan")
 game:GetService("CoreGui").RobloxNetworkPauseNotification.Enabled = false
 task.wait(.1)
+local OldCFrame
+local OldPos
+do
+    local HumanoidRootPart = Character.HumanoidRootPart
 
+    OldCFrame = HumanoidRootPart.CFrame
+    OldPos = HumanoidRootPart.Position
+end
 _G.loop = not _G.loop
 while _G.loop do
 
     local Character = LocalPlayer.Character
     local HumanoidRootPart = Character.HumanoidRootPart
     local Humanoid = Character.Humanoid
-
-    local OldCFrame = HumanoidRootPart.CFrame
-    local OldPos = HumanoidRootPart.Position
 
     for _, Part in ipairs(Character:GetDescendants()) do
         if Part:IsA("BasePart") then
