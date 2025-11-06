@@ -10,28 +10,10 @@ end
 workspace.FallenPartsDestroyHeight = tonumber("nan")
 task.wait(.1)
 
-
 _G.loop = not _G.loop
-local Dupe
-local Original = LocalPlayer.Character
-if _G.loop then
-    Original.Archivable = true
-
-    Dupe = Original:Clone()
-    Dupe.Parent = workspace
-    workspace.CurrentCamera.CameraSubject = Dupe
-else
-    if Dupe then
-        Dupe:Destroy()
-        LocalPlayer.Character = Original
-        workspace.CurrentCamera.CameraSubject = Original
-    end
-end
-
-
 while _G.loop do
-    local Character = Original
-    
+
+    local Character = LocalPlayer.Character
     local HumanoidRootPart = Character.HumanoidRootPart -- h
     local Humanoid = Character.Humanoid
 
@@ -40,8 +22,6 @@ while _G.loop do
             Part.CanTouch = false
         end
     end
-
-    LocalPlayer.Character = Dupe
 
     local PlayerList = Players:GetPlayers()
     table.remove(PlayerList, table.find(PlayerList, LocalPlayer))
