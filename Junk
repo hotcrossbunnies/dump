@@ -18,8 +18,10 @@ _G.loop = not _G.loop
 while _G.loop do
 
     local Character = LocalPlayer.Character
-    local HumanoidRootPart = Character.HumanoidRootPart -- h
+    local HumanoidRootPart = Character.HumanoidRootPart
     local Humanoid = Character.Humanoid
+
+    local OldPos = HumanoidRootPart.CFrame
 
     for _, Part in ipairs(Character:GetDescendants()) do
         if Part:IsA("BasePart") then
@@ -30,7 +32,6 @@ while _G.loop do
     local PlayerList = Players:GetPlayers()
     table.remove(PlayerList, table.find(PlayerList, LocalPlayer))
     for _, Player in pairs(PlayerList) do
-        local OldPos = HumanoidRootPart.CFrame
         local VCharacter = Player.Character
         local VHumanoidRootPart
         local VHumanoid
@@ -38,7 +39,7 @@ while _G.loop do
             VHumanoidRootPart = VCharacter:FindFirstChild("HumanoidRootPart")
             VHumanoid = VCharacter:FindFirstChild("Humanoid")
         end
-        if VHumanoidRootPart and VHumanoid and not (VHumanoid.SeatPart and VHumanoid.SeatPart.Anchored == true) then
+        if VHumanoidRootPart and (OldPos - VHumanoidRootPart.Position).Magnitude < 3000 and VHumanoid and not (VHumanoid.SeatPart and VHumanoid.SeatPart.Anchored == true) then
             setcam(VCharacter)
             for i = 1, 5 do
                 HumanoidRootPart.CFrame = VHumanoidRootPart.CFrame * CFrame.Angles(0, math.rad(90), 0)
