@@ -6,6 +6,9 @@ local function predict(target)
     local p = Vector3.new(v.X, v.Y / 5 + 1, v.Z - .2) / (.4 * ((LocalPlayer:GetNetworkPing() * 1000) / 50))
     return CFrame.new(target.Position + p, target.Position) * CFrame.Angles(math.rad(90), 0, 0)
 end
+local function setcam(target)
+    workspace.CurrentCamera.CameraSubject = target
+end
 
 workspace.FallenPartsDestroyHeight = tonumber("nan")
 task.wait(.1)
@@ -35,6 +38,7 @@ while _G.loop do
             VHumanoid = VCharacter:FindFirstChild("Humanoid")
         end
         if VHumanoidRootPart and VHumanoid and not (VHumanoid.SeatPart and VHumanoid.SeatPart.Anchored == true) then
+            setcam(VCharacter)
             for i = 1, 5 do
                 HumanoidRootPart.CFrame = VHumanoidRootPart.CFrame * CFrame.Angles(0, math.rad(90), 0)
                 HumanoidRootPart.Velocity = Vector3.new(0, -1e9, 0)
@@ -58,4 +62,5 @@ while _G.loop do
         end
     end
     task.wait()
+    setcam(Character)
 end
