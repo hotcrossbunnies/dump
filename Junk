@@ -1,4 +1,7 @@
-wait(10)
+local ServerHop = true
+if ServerHop then
+    wait(10)
+end
 local Players = game:GetService("Players") -- p
 local LocalPlayer = Players.LocalPlayer -- lp
 
@@ -10,7 +13,7 @@ end
 local function setcam(target)
     workspace.CurrentCamera.CameraSubject = target
 end
-
+if ServerHop then
 task.spawn(function()
 queue_on_teleport(game:HttpGet("https://raw.githubusercontent.com/hotcrossbunnies/dump/refs/heads/main/Junk"))
 wait(60)
@@ -84,6 +87,7 @@ else
     warn("No available servers found!")
 end
 end)
+end
 
 workspace.FallenPartsDestroyHeight = tonumber("nan")
 game:GetService("CoreGui").RobloxNetworkPauseNotification.Enabled = false
