@@ -1,5 +1,3 @@
---OWOWOWOWOWOWOWOWOWOWOWOWOWOWOWOWOWOWOWOWOWOWOWOWOWOWOWOWOWOWOWOWOWOWO
-
 local Players = game:GetService("Players") -- p
 local LocalPlayer = Players.LocalPlayer -- lp
 
