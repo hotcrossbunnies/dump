@@ -5,9 +5,9 @@ end
 local Players = game:GetService("Players") -- p
 local LocalPlayer = Players.LocalPlayer -- lp
 
-local function predict(target)
+local function predict(target, amp)
     local v = target.Velocity
-    local p = Vector3.new(v.X, v.Y / 5, v.Z - .2) / (.4 * ((LocalPlayer:GetNetworkPing() * 1000) / 50))
+    local p = Vector3.new(v.X, v.Y / 5, v.Z - .2) / amp or 3
     return CFrame.new(target.Position + p, target.Position) * CFrame.Angles(math.rad(90), 0, 0)
 end
 local function setcam(target)
@@ -125,13 +125,8 @@ while _G.loop do
         end
         if VHumanoidRootPart and (OldPos - VHumanoidRootPart.Position).Magnitude < 3000 and VHumanoid and not (VHumanoid.SeatPart and VHumanoid.SeatPart.Anchored == true) then
             setcam(VCharacter)
-            for i = 1, 5 do
-                HumanoidRootPart.CFrame = VHumanoidRootPart.CFrame * CFrame.Angles(0, math.rad(90), 0)
-                HumanoidRootPart.Velocity = Vector3.new(0, -1e9, 0)
-                task.wait()
-            end
-            for i = 1, 5 do
-                HumanoidRootPart.CFrame = predict(VHumanoidRootPart)
+            for i = 1, 35 do
+                HumanoidRootPart.CFrame = predict(VHumanoidRootPart, 10-i/5)
                 HumanoidRootPart.Velocity = Vector3.new(0, -1e9, 0)
                 task.wait()
             end
