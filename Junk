@@ -1,4 +1,4 @@
-local ServerHop = true
+local ServerHop = false
 if ServerHop then
     wait(10)
 end
