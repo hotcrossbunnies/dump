@@ -49,7 +49,7 @@ end
 
 ;(
     ({
-[1230456] = function()
+[7081848020] = function()
   local tab2 = gtab()
   tab2:Button({
 	  Text = "Infinite Yield",
