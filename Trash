@@ -1,0 +1,65 @@
+local ReGui = loadstring(game:HttpGet('https://raw.githubusercontent.com/depthso/Dear-ReGui/refs/heads/main/ReGui.lua'))()
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+local Backpack = LocalPlayer.Backpack
+
+local function SendMsg(str,hide)
+    if hide then
+        TextChatService.TextChannels.RBXSystem:SendAsync(str)
+    else
+        TextChatService.TextChannels.RBXGeneral:SendAsync(str)
+    end
+end
+
+local function GetPlayer(Input)
+    for _, Player in ipairs(Players:GetPlayers()) do
+        if (string.lower(Input) == string.sub(string.lower(Player.Name), 1, #Input)) or (string.lower(Input) == string.sub(string.lower(Player.DisplayName), 1, #Input)) then
+            return Player;
+        end
+    end
+end
+
+local Window = ReGui:TabsWindow({
+	Title = "useful thing",
+	Size = UDim2.fromOffset(300, 200)
+})
+
+local tab1 = Window:CreateTab({Name="Main"})
+
+tab1:Label({Text="Update 30"})
+
+local tab1row1 = tab1:Row()
+tab1row1:Label({Text="Load..."})
+tab1row1:Button({
+	Text = "Infinite Yield",
+	Callback = function()
+		loadstring(game:HttpGet("https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"))()
+	end,
+})
+tab1row1:Button({
+    Text = "Remote Spy",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/infyiff/backup/main/SimpleSpyV3/main.lua"))()
+    end
+})
+
+local function gtab()
+  return Window:CreateTab({Name=game:GetService("MarketplaceService"):GetProductInfo(game.PlaceId).Name})
+end
+
+;(
+    ({
+[1230456] = function()
+  local tab2 = gtab()
+  tab2:Button({
+	  Text = "Infinite Yield",
+	  Callback = function()
+	  	loadstring(game:HttpGet("https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"))()
+	  end,
+  })
+end,
+[6540321] = function()
+print("whaa")
+end
+    })[game.GameId] or function() end
+)()
