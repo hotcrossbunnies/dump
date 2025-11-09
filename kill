@@ -1,0 +1,65 @@
+
+
+
+
+
+local cf = CFrame.new
+local v3 = Vector3.new
+local v3_0 = v3(0,0,0)
+
+local players=game:GetService("Players")
+local lp = players.LocalPlayer
+local char = lp.Character
+local hrp = char.HumanoidRootPart
+local hum = char.Humanoid
+
+local remote = workspace:WaitForChild("Events"):WaitForChild("Teleport")
+local stroller = lp.Backpack:FindFirstChild("Stroller") or char:FindFirstChild("Stroller") or error("Cant find stroller")
+local touch
+for _,v in pairs(stroller:GetChildren()) do
+    if v:FindFirstChild("TouchInterest") then
+        touch = v
+    end
+end
+
+local victim
+do
+    local plrs = players:GetChildren()
+    table.remove(plrs,table.find(plrs,lp))
+    for _,v in pairs(plrs) do
+    if v.Character and v.Character.Torso:FindFirstChild("Part") then
+    victim = v.Character
+    end
+    end
+end
+if not victim then error("Nobody to kill") end
+
+local opos = hrp.CFrame
+stroller.Parent = char
+for _,v in pairs(workspace["Police Station"].JailCell:GetChildren()) do
+    if v:IsA("Part") then v.CanTouch = false end
+end
+
+hum.JumpPower = 0
+remote:FireServer(CFrame.new(-665, 47, 150))
+
+local rep = 0
+repeat rep += 1
+firetouchinterest(victim.HumanoidRootPart,touch,0)
+firetouchinterest(victim.HumanoidRootPart,touch,1)
+task.wait()
+until rep >= 100 or victim:FindFirstChild("Sitting")
+
+hum.JumpPower = 50
+
+stroller.Parent = lp.Backpack
+hrp.CFrame = opos
+
+-- Disable trip
+hum.PlatformStand = true
+task.wait()
+hum.PlatformStand = false
+for i=1,10 do
+hrp.CFrame = opos
+task.wait()
+end
