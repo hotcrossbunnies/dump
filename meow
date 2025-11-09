@@ -1,0 +1,90 @@
+--i did use chatgpt to remake this😞
+--because i suck at optimizations
+--original is the file called "kill"
+
+--// Static (constant) references - only defined once
+local cf = CFrame.new
+local players = game:GetService("Players")
+local lp = players.LocalPlayer
+local ws = workspace
+local remote = ws:WaitForChild("Events"):WaitForChild("Teleport")
+
+--// Main kill function
+local function kill(plr)
+    local char = lp.Character or lp.CharacterAdded:Wait()
+    local hrp = char:WaitForChild("HumanoidRootPart")
+    local hum = char:WaitForChild("Humanoid")
+
+    -- Find stroller (once per call in case it moved)
+    local stroller = lp.Backpack:FindFirstChild("Stroller") or char:FindFirstChild("Stroller")
+    assert(stroller, "Can't find stroller")
+
+    -- Find touch part
+    local touch
+    for _, v in ipairs(stroller:GetChildren()) do
+        if v:FindFirstChildOfClass("TouchTransmitter") or v:FindFirstChild("TouchInterest") then
+            touch = v
+            break
+        end
+    end
+    assert(touch, "No TouchInterest found in stroller")
+
+    -- Select victim (prefer argument)
+    local victim
+    if plr and plr.Character then
+        victim = plr.Character
+    else
+        for _, v in ipairs(players:GetPlayers()) do
+            if v ~= lp and v.Character and v.Character:FindFirstChild("Torso") and v.Character.Torso:FindFirstChild("Part") then
+                victim = v.Character
+                break
+            end
+        end
+    end
+    assert(victim, "No valid victim found")
+
+    -- Save position
+    local originalCF = hrp.CFrame
+
+    -- Disable JailCell touch
+    local policeStation = ws:FindFirstChild("Police Station")
+    if policeStation then
+        local jailCell = policeStation:FindFirstChild("JailCell")
+        if jailCell then
+            for _, part in ipairs(jailCell:GetChildren()) do
+                if part:IsA("BasePart") then
+                    part.CanTouch = false
+                end
+            end
+        end
+    end
+
+    -- Teleport to kill zone
+    hum.JumpPower = 0
+    remote:FireServer(cf(-665, 47, 150))
+
+    -- Perform stroller-touch kill
+    local victimHRP = victim:WaitForChild("HumanoidRootPart")
+    for _ = 1, 100 do
+        if victim:FindFirstChild("Sitting") then break end
+        firetouchinterest(victimHRP, touch, 0)
+        firetouchinterest(victimHRP, touch, 1)
+        task.wait()
+    end
+
+    -- Restore everything
+    hum.JumpPower = 50
+    stroller.Parent = lp.Backpack
+    hrp.CFrame = originalCF
+
+    -- Prevent trip glitch
+    hum.PlatformStand = true
+    task.wait()
+    hum.PlatformStand = false
+
+    -- Stabilize character position
+    for _ = 1, 10 do
+        hrp.CFrame = originalCF
+        task.wait()
+    end
+end
