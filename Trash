@@ -59,7 +59,27 @@ end
   })
 end,
 [6540321] = function()
-print("whaa")
+  local tab2 = gtab()
+  tab2:Button({
+	  Text = "Auto bridge",
+	  Callback = function()
+local color = game:GetService("Players").LocalPlayer.Team.Name
+local part = workspace[color.."Zone"]["Area"..color]
+local h = game:GetService("Players").LocalPlayer.Character.HumanoidRootPart
+_G.t = not _G.t while _G.t do
+local wall = workspace[color.."Zone"].Build:FindFirstChild("TriggerWall",true)
+firetouchinterest(h,part,0)
+firetouchinterest(h,part,1)
+if wall then
+firetouchinterest(h,wall,0)
+firetouchinterest(h,wall,1)
+end
+firetouchinterest(h,workspace.Trophy.Abajo,0)
+firetouchinterest(h,workspace.Trophy.Abajo,1)
+task.wait()
+end
+	  end,
+  })
 end
     })[game.GameId] or function() end
 )()
