@@ -66,14 +66,16 @@ end
 end,
 [7597641221] = function()
   local tab2 = gtab()
+  local autobridge = false
   tab2:Checkbox({
       Value = false,
 	  Label = "Auto bridge",
 	  Callback = function(self, value)
+          autobridge = value
           local color = game:GetService("Players").LocalPlayer.Team.Name
           local part = workspace[color.."Zone"]["Area"..color]
           local h = game:GetService("Players").LocalPlayer.Character.HumanoidRootPart
-          while value do
+          while autobridge do
               local wall = workspace[color.."Zone"].Build:FindFirstChild("TriggerWall",true)
               firetouchinterest(h,part,0)
               firetouchinterest(h,part,1)
