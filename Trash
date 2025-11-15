@@ -42,6 +42,12 @@ tab1row1:Button({
         loadstring(game:HttpGet("https://raw.githubusercontent.com/infyiff/backup/main/SimpleSpyV3/main.lua"))()
     end
 })
+tab1:Button({
+    Text = "Copy GameId",
+    Callback = function()
+        setclipboard(game.GameId)
+    end
+})
 
 local function gtab()
   return Window:CreateTab({Name=game:GetService("MarketplaceService"):GetProductInfo(game.PlaceId).Name})
@@ -58,26 +64,26 @@ end
 	  end,
   })
 end,
-[6540321] = function()
+[7597641221] = function()
   local tab2 = gtab()
   tab2:Button({
 	  Text = "Auto bridge",
 	  Callback = function()
-local color = game:GetService("Players").LocalPlayer.Team.Name
-local part = workspace[color.."Zone"]["Area"..color]
-local h = game:GetService("Players").LocalPlayer.Character.HumanoidRootPart
-_G.t = not _G.t while _G.t do
-local wall = workspace[color.."Zone"].Build:FindFirstChild("TriggerWall",true)
-firetouchinterest(h,part,0)
-firetouchinterest(h,part,1)
-if wall then
-firetouchinterest(h,wall,0)
-firetouchinterest(h,wall,1)
-end
-firetouchinterest(h,workspace.Trophy.Abajo,0)
-firetouchinterest(h,workspace.Trophy.Abajo,1)
-task.wait()
-end
+          local color = game:GetService("Players").LocalPlayer.Team.Name
+          local part = workspace[color.."Zone"]["Area"..color]
+          local h = game:GetService("Players").LocalPlayer.Character.HumanoidRootPart
+          _G.autobridge = not _G.autobridge while _G.autobridge do
+              local wall = workspace[color.."Zone"].Build:FindFirstChild("TriggerWall",true)
+              firetouchinterest(h,part,0)
+              firetouchinterest(h,part,1)
+              if wall then
+                  firetouchinterest(h,wall,0)
+                  firetouchinterest(h,wall,1)
+              end
+              firetouchinterest(h,workspace.Trophy.Abajo,0)
+              firetouchinterest(h,workspace.Trophy.Abajo,1)
+              task.wait()
+          end
 	  end,
   })
 end
